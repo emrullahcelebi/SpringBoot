@@ -1,14 +1,10 @@
 package com.tpro.service;
 
 import java.util.List;
-
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.tpro.domain.Student;
 import com.tpro.dto.StudentDTO;
 import com.tpro.exception.ConflictException;
@@ -72,6 +68,24 @@ public class StudentService {
 	public Page<Student> getAllWithPage(Pageable pageable) {
 		return studentRepository.findAll(pageable);
 	}
+
+	public List<Student> findStudent(String lastName) {
+		
+		return studentRepository.findByLastName(lastName);
+	}
+
+	public List<Student> findAllEqualsGrade(Integer grade) {
+		
+		return studentRepository.findAllEqualsGrade(grade);
+	}
+
+	public StudentDTO findStudentDTOById(Long id) {
+		return studentRepository.
+				findStudentDTOById(id).
+				orElseThrow(()->new ResourceNotFoundException("Student not found with id: "+id));
+	
+	}
+	
 	
 
 

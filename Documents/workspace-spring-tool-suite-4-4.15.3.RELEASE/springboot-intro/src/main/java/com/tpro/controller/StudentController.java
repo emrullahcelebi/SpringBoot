@@ -52,7 +52,7 @@ public class StudentController {
 	@PostMapping // post ile gelirse bura calisir
 	public ResponseEntity<Map<String,String>> creatStudent(@Valid @RequestBody Student student){
 		//@RequestBody json formatini bizim objeye ceviriyor
-		//@Valid gelen json un degerlerini bizim istedigimiz degerler mi kontrol ediyor
+		//@Valid gelen json un degerlerini   bizim istedigimiz degerler mi kontrol ediyor
 		studentService.createStudent(student);
 		Map<String,String> map=new HashMap<>();
 		map.put("message", "Student is created successfuly");//key-value
@@ -106,6 +106,30 @@ public class StudentController {
 		Page<Student>studentPage= studentService.getAllWithPage(pageable);
 		return ResponseEntity.ok(studentPage);
 	}
+	
+	//Get By LastName
+	@GetMapping("/querylastname")
+	public ResponseEntity<List<Student>> getStudentByLastName(@RequestParam("lastName")String lastName){
+		List<Student> list = studentService.findStudent(lastName);
+		return ResponseEntity.ok(list);
+	}
+	
+	//GetALL studentBy grade(JPQL)
+	@GetMapping("/grade/{grade}")
+	public ResponseEntity<List<Student>> getStudentsEqualsGrade(@PathVariable("grade")Integer grade){
+		List<Student> list = studentService.findAllEqualsGrade(grade);
+		return ResponseEntity.ok(list);
+		}
+
+	//DB den direk DTO olarak datami alsam?
+	@GetMapping("/query/dto")
+	public ResponseEntity<StudentDTO> getStudentDTO(@RequestParam("id")Long id){
+		StudentDTO studentDTO = studentService.findStudentDTOById(id);
+		return ResponseEntity.ok(studentDTO);
+		
+	}
+	
+	
 	
 	
 	
