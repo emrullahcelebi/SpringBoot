@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,12 +34,27 @@ import com.tpro.service.StudentService;
 @RestController
 @RequestMapping("/students")//burada /students bunla geleni buradan devam et
 public class StudentController {
+	
+	Logger logger=LoggerFactory.getLogger(StudentController.class);//log lama yapabilmek icin
+	//loglama seviyeleri ayarlanacak
+	
 
 	@Autowired
 	private StudentService studentService;//new siz obje injection yaptik
 	
+	
+	/*
 	@GetMapping("/welcome")//localhost:8080/students/welcome ile gleirsen bu method calisir
 	public String welcome() {
+		return "Welcome to Student Controller";
+	}
+	*/
+	
+	@GetMapping("/welcome")//localhost:8080/students/welcome ile gleirsen bu method calisir
+	public String welcome(HttpServletRequest request) {
+		
+		logger.warn("------------------Welkome{}",request.getServletPath());
+		//warm den itibaren log verilerini istiyorum
 		return "Welcome to Student Controller";
 	}
 	
