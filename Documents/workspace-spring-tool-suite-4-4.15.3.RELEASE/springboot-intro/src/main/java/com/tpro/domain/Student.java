@@ -51,6 +51,7 @@ public class Student {//pojo class im
 	private String phoneNumber;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING,pattern="MM/dd/yyyy HH:mm:ss", timezone="Turkey")
+	//Json da format duzenlemek icin
 	private LocalDateTime createDate= LocalDateTime.now();
 
 	@OneToMany(mappedBy="student")

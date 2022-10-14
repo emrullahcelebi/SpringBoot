@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,85 +31,99 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tpro.domain.Student;
 import com.tpro.dto.StudentDTO;
 import com.tpro.service.StudentService;
+/*
+ * NOTLAR
+ * --------Spring Security--------
+sen kimsin? -->authentication
+acaba burda bulunmaya yetkim var mı?-->authorization
+***login ile giriş yaptığımızda bu authentication oluyor.
+ismi emin şifreside bu...
+***lms'se girdik mesela ama heryere girmeye yetkimiz yok. bir ders videosu ekleyemeyiz. buna yetkimiz yok. ya admin ya teacher olarak girmemiz lazım
+ */
+
 
 @RestController
-@RequestMapping("/students")//burada /students bunla geleni buradan devam et
+@RequestMapping("/students")
 public class StudentController {
+	Logger logger= LoggerFactory.getLogger(StudentController.class);//slf4j den import ediyoruz.
 	
-	Logger logger=LoggerFactory.getLogger(StudentController.class);//log lama yapabilmek icin
-	//loglama seviyeleri ayarlanacak
-	
-
 	@Autowired
-	private StudentService studentService;//new siz obje injection yaptik
+	private StudentService studentService ;
 	
-	
-	/*
-	@GetMapping("/welcome")//localhost:8080/students/welcome ile gleirsen bu method calisir
+/*	@GetMapping("/welcome") // localhost:8080/students/welcome
 	public String welcome() {
 		return "Welcome to Student Controller";
 	}
 	*/
 	
-	@GetMapping("/welcome")//localhost:8080/students/welcome ile gleirsen bu method calisir
+	
+	@GetMapping("/welcome") // localhost:8080/students/welcome
 	public String welcome(HttpServletRequest request) {
-		
-		logger.warn("------------------Welkome{}",request.getServletPath());
-		//warm den itibaren log verilerini istiyorum
+		logger.warn("-------------Welcome{}",request.getServletPath());
 		return "Welcome to Student Controller";
 	}
 	
-	//Get All Students
-	@GetMapping //get ile gelirse bura calisir
-	public ResponseEntity<List<Student>> getAll() {//donen degerler Student oldugu icin List kullaniyoruz
-		List<Student>students= studentService.getAll();
-		return ResponseEntity.ok(students);//2 bilgi gonderiyor 1.status code 404 200 gibi, digeri liste
-											//ResponseEntity ile isimiz kolaylasiyor "ok"->hata kodlari. gibi farkli methodlari kullanabiliyoruz
-	}
 	
-	//Create new Student
-	@PostMapping // post ile gelirse bura calisir
-	public ResponseEntity<Map<String,String>> creatStudent(@Valid @RequestBody Student student){
-		//@RequestBody json formatini bizim objeye ceviriyor
-		//@Valid gelen json un degerlerini   bizim istedigimiz degerler mi kontrol ediyor
+	// Get All Students
+	@GetMapping
+	@PreAuthorize("hasRole('ADMIN')")//sadece admin olan kişi getall yapabilsin ROL ATAMA
+	public ResponseEntity<List<Student>> getAll() {
+		// @RequestBody = gelen parametreyi, requestin bodysindeki bilgisi , 
+		   //Student objesine map edilmesini sağlıyor.
+		List<Student> students=  studentService.getAll();
+		return ResponseEntity.ok(students);		
+	}	
+	// Create new Student
+	@PostMapping
+	@PreAuthorize("hasRole('STUDENT')")//student olanlar create edebilsin
+	public ResponseEntity<Map<String,String>> createStudent(@Valid @RequestBody Student student){
+		// @Valid : parametreler valid mi kontrol eder, bu örenekte Student 
+		   //objesi oluşturmak için  gönderilen fieldlar yani
+		   //name gibi özellikler düzgün set edilmiş mi ona bakar.
 		studentService.createStudent(student);
-		Map<String,String> map=new HashMap<>();
-		map.put("message", "Student is created successfuly");//key-value
+		Map<String,String> map = new HashMap<>();
+		map.put("message", "Student is created successfuly");
 		map.put("status", "true");
-		return new ResponseEntity<>(map,HttpStatus.CREATED);//CREATED olusturuldu
+		return new ResponseEntity<>(map,HttpStatus.CREATED);				
 	}
 	
-	//get a Student by ID by RewuestParam
+	
+	// get a Student by ID by RequestParam
 	@GetMapping("/query") 
-	public ResponseEntity<Student> getStudent(@RequestParam("id") Long id){
-		Student student= studentService.findStudent(id);
+	@PreAuthorize("hasRole('ADMIN')or hasRole('STUDENT')")//hem admin hem student olanlar
+	public ResponseEntity<Student> getStudent(@RequestParam("id") Long id){//requestparamdan aldığı id bilgisini pojo'daki id'yle mapledik
+		Student student = studentService.findStudent(id);//student servis classındaki findStudent metoduna gönderdik
 		return ResponseEntity.ok(student);
 		
 	}
 	
-	//get a Student by ID by PathVariable
+	// get a Student by ID by PathVariable
 	@GetMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')or hasRole('STUDENT')")
 	public ResponseEntity<Student> getStudentWithPath(@PathVariable("id") Long id){
-		Student student= studentService.findStudent(id);
+		Student student = studentService.findStudent(id);
 		return ResponseEntity.ok(student);
+		
 	}
 	
-	//Delete Student
+	// Delete Student
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Map<String,String>> deleteStudent(@PathVariable("id") Long id){
+	public ResponseEntity<Map<String,String>> deleteStudent(@PathVariable("id") Long id) {
 		studentService.deleteStudent(id);
-		Map<String,String> map=new HashMap<>();
-		map.put("message", "Student is deleted successfuly");//key-value
+		Map<String,String> map = new HashMap<>();
+		map.put("message", "Student is deleted successfuly");
 		map.put("status", "true");
 		return new ResponseEntity<>(map,HttpStatus.OK);
+		
 	}
 	
-	//Update Student DTO kullanarak
-	@PutMapping("{id}") //localhost:8080/students/1
-	public ResponseEntity<Map<String,String>> updateStudent(@PathVariable("id") Long id,@RequestBody StudentDTO studentDTO){
+	//update Student, DTO kullanarak yapacağız
+	@PutMapping("{id}")//.../students/1
+	public ResponseEntity<Map<String, String>> updateStudent( @PathVariable Long id, @RequestBody StudentDTO studentDTO){
+		
 		studentService.updateStudent(id,studentDTO);
-		Map<String,String> map=new HashMap<>();
-		map.put("message", "Student is updated successfuly");//key-value
+		Map<String,String> map = new HashMap<>();
+		map.put("message", "Student is updated successfuly");
 		map.put("status", "true");
 		return new ResponseEntity<>(map,HttpStatus.OK);
 	}
@@ -116,40 +131,38 @@ public class StudentController {
 	//pageable
 	@GetMapping("/page")
 	public ResponseEntity<Page<Student>> getAllWithPage(@RequestParam("page") int page,
-														@RequestParam("size") int size,
-														@RequestParam("sort") String prop,
-														@RequestParam("direction") Direction direction){
-		
+															@RequestParam("size") int size,
+															@RequestParam("sort") String prop,
+															@RequestParam("direction") Direction direction){
 		Pageable pageable=PageRequest.of(page, size,Sort.by(direction,prop));
-		Page<Student>studentPage= studentService.getAllWithPage(pageable);
+		Page<Student> studentPage= studentService.getAllWithPage(pageable);
 		return ResponseEntity.ok(studentPage);
+		
 	}
 	
-	//Get By LastName
-	@GetMapping("/querylastname")
-	public ResponseEntity<List<Student>> getStudentByLastName(@RequestParam("lastName")String lastName){
-		List<Student> list = studentService.findStudent(lastName);
-		return ResponseEntity.ok(list);
+	//get by last name
+	
+	@GetMapping("/querylastname")//students/querylastname
+	public ResponseEntity<List<Student>> getStudentByLastName(@RequestParam("lastName") String lastName){
+		
+	List<Student> list=	studentService.findStudent(lastName);
+	return ResponseEntity.ok(list);	
+		
 	}
 	
-	//GetALL studentBy grade(JPQL)
+	//get all students by grade(JPQL ile)
 	@GetMapping("/grade/{grade}")
-	public ResponseEntity<List<Student>> getStudentsEqualsGrade(@PathVariable("grade")Integer grade){
+	public ResponseEntity<List<Student>> getStudentsEqualsGrade(@PathVariable("grade") Integer grade){
+		
 		List<Student> list = studentService.findAllEqualsGrade(grade);
 		return ResponseEntity.ok(list);
-		}
-
-	//DB den direk DTO olarak datami alsam?
-	@GetMapping("/query/dto")
-	public ResponseEntity<StudentDTO> getStudentDTO(@RequestParam("id")Long id){
-		StudentDTO studentDTO = studentService.findStudentDTOById(id);
-		return ResponseEntity.ok(studentDTO);
-		
 	}
 	
-	
-	
-	
-	
-	
+	//DB'den direkt DTO olarak data alsam?
+	@GetMapping("/query/dto")
+	public ResponseEntity<StudentDTO> getStudentsDTO (@RequestParam("id") Long id){
+		
+		StudentDTO studentDTO= studentService.findStudentDTOById(id);
+		return ResponseEntity.ok(studentDTO);
+	}		
 }
