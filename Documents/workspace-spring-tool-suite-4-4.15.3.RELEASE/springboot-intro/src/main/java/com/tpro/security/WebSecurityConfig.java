@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				build();//birden fazla yetki verebiliyoruz.
 		
 		return new InMemoryUserDetailsManager(new UserDetails[] {userEmin,userAlvia,userIbrahim});//InMemoryUserDetailsManager metodu üzerinden UserDetailsleri giriyoruz
-		
+		//burada hazir method kullaniyoruz "InMemoryUserDetailsManager" gecici obje gibi cparametreli const. gibi yaziyoruz
 		
 	}
 	@Bean
