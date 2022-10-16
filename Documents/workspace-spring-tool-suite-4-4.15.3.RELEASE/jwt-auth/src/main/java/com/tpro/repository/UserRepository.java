@@ -12,6 +12,6 @@ import com.tpro.exception.ResourceNotFoundException;
 public interface UserRepository extends JpaRepository<User, Long> {
 	
 	Optional<User>findByUserName(String userName)throws ResourceNotFoundException;
-	Boolean existsByUserName(String userName);
+	Boolean existsByUserName(String userName);//ihtiyac olabilir diye
 
 }

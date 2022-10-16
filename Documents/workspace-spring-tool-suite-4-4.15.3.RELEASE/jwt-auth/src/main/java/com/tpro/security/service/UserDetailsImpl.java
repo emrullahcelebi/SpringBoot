@@ -15,12 +15,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDetailsImpl implements UserDetails {
+public class UserDetailsImpl implements UserDetails {//Spring Security nin istedigi UserDetails oldugu icin 
 	private Long id;
 	
 	private String userName;
 	
-	@JsonIgnore
+	@JsonIgnore //bu on tarafa gitmesin diye
 	private String password;
 	
 	private Collection<? extends GrantedAuthority> authorities;

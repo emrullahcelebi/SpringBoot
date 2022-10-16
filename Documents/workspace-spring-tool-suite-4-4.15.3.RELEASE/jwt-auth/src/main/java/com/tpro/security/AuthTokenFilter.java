@@ -33,7 +33,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		try {
 			if(jwtToken!=null && jwtUtils.validateToken(jwtToken) ) {
 				String userName = jwtUtils.getUserNameFromJwtToken(jwtToken);
-				UserDetails userDetails= userDetailsService.loadUserByUsername(userName);
+				UserDetails userDetails= userDetailsService.loadUserByUsername(userName);//burayada securty contex e kulllanici bilgilerini gonderdik
 				UsernamePasswordAuthenticationToken authentication=
 						new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -55,8 +55,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		return null;
 	}
 	
-	@Override
+	@Override   // burada gelen entpoint e gore islem yapilip yapilmayacagini soyluyoruz / serbes dolasim alani gibi
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+		//bunlari filitrelemeye tabi tutma bunlar kayitsiz kullanicilar
 		AntPathMatcher antMather=new AntPathMatcher();
 		return antMather.match("/register",request.getServletPath())|| 
 				antMather.match("/login",request.getServletPath());
