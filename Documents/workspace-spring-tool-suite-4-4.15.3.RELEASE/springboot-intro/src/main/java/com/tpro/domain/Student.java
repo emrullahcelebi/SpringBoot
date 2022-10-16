@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -54,20 +56,15 @@ public class Student {//pojo class im
 	//Json da format duzenlemek icin
 	private LocalDateTime createDate= LocalDateTime.now();
 
-	@OneToMany(mappedBy="student")
-	private List<Book>books=new ArrayList<>();
 	
-
-
-
-
-
-
-
 	
-
-
+	@OneToMany(mappedBy = "student")
+	private List<Book> books = new ArrayList<>();
 	
-
+	@OneToOne
+	@JoinColumn(name="user_id")
+	private User user;
+	
 	
 }
+
