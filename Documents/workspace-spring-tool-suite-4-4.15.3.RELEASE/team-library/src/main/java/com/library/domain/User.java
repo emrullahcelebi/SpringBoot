@@ -3,22 +3,28 @@ package com.library.domain;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 import lombok.AllArgsConstructor;
@@ -27,17 +33,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-
-
-
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_user")
-
 public class User {
 
 	@Id
@@ -82,4 +83,13 @@ public class User {
 	
 	@OneToMany(mappedBy="user",orphanRemoval=true)
 	private List<Book> books=new ArrayList<>();
+	
+	@JoinTable(name="tbl_user_role",joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns = @JoinColumn(name="role_id"))
+	@ManyToMany(fetch=FetchType.EAGER)// az veri olacagi icin cok tablo yok diye EAGER yaptik
+	private Set<Role> roles=new HashSet<>();//Set yapmamizin sebebi Unique olmasi
+	
+	
+	@OneToOne
+	@JoinColumn(name="role_id")
+	private Role role;
 }

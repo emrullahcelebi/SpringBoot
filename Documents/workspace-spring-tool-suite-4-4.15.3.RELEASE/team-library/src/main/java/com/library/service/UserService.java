@@ -1,11 +1,14 @@
 package com.library.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.library.repository.UserRepository;
 
-public class KullanıcıService {
+@Service
+public class UserService {
 @Autowired
-private UserRepository kullanıcıRepository;
+private UserRepository userRepository;
 
 }
+
