@@ -1,7 +1,7 @@
 package com.lib.security;
-
 import java.io.IOException;
 
+import javax.persistence.metamodel.SetAttribute;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,49 +19,58 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-	@Autowired
-	private JwtUtils jwtUtils;
-	
-	@Autowired
-	private UserDetailsService userDetailsService;
+    @Autowired 
+	private JwtUtils jwtUtils;	
+    
+    @Autowired
+    private UserDetailsService userDetailsService;
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		String jwtToken=parseJwt(request);
-		//requestin icinden tokeni alacagim 
+		String jwtToken = parseJwt(request); // requestin içinden gelen tokeni alıyorum	
 		try {
-			if(jwtToken!=null && jwtUtils.validateToken(jwtToken) ) {
+			if(jwtToken!=null && jwtUtils.validateToken(jwtToken)) { // 2.parametrede token validation yapılıyor
 				String userName = jwtUtils.getUserNameFromJwtToken(jwtToken);
-				UserDetails userDetails= userDetailsService.loadUserByUsername(userName);//burayada securty contex e kulllanici bilgilerini gonderdik
-				UsernamePasswordAuthenticationToken authentication=
+				UserDetails userDetails = userDetailsService.loadUserByUsername(userName); // user -validation
+			
+				request.setAttribute("mail",userDetails.getUsername());//bunu ekledik bize mail getirsin diye
+				//request.setAttribute("password", userDetails.getPassword());//
+				
+				UsernamePasswordAuthenticationToken authentication = 
 						new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-				SecurityContextHolder.getContext().setAuthentication(authentication);
+				SecurityContextHolder.getContext().setAuthentication(authentication); // login kullanıcı bilgilerini Contexte atıyorum
 			}
 		} catch (UsernameNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
-		//yukarda yaptiklarimizi eklememiz lazim
 		filterChain.doFilter(request, response);
 		
+		
 	}
+	
+	
 	private String parseJwt(HttpServletRequest request) {
-		//request in header kismindaki Authorization
-		String header=request.getHeader("Authorization");
+		// requestin header kısmındaki Authorization
+		String header = request.getHeader("Authorization");
 		if(StringUtils.hasText(header)&&header.startsWith("Bearer ")) {
 			return header.substring(7);
+			
 		}
 		return null;
+		
+		
 	}
 	
-	@Override   // burada gelen entpoint e gore islem yapilip yapilmayacagini soyluyoruz / serbes dolasim alani gibi
+	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-		//bunlari filitrelemeye tabi tutma bunlar kayitsiz kullanicilar
-		AntPathMatcher antMather=new AntPathMatcher();
-		return antMather.match("/register",request.getServletPath())|| 
-				antMather.match("/login",request.getServletPath());
+		AntPathMatcher antMatcher = new AntPathMatcher();
+		return antMatcher.match("/register", request.getServletPath()) || 
+				antMatcher.match("/login", request.getServletPath());
 	}
-	
 
 }
+
+
+

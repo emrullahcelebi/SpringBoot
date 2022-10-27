@@ -1,4 +1,5 @@
 package com.lib.domain;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -23,7 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -34,10 +34,9 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="user_id")//1
+	@Column(name="user_id")
 	private Long id;
 
-	//@JsonProperty("userName")
 	@NotNull(message = "First name can not be null")
     @NotBlank(message = "last name can not be white space")
     @Size(min = 2,max = 25,message = "First name '${validatedValue}' must be between {min} and {max} long")
@@ -69,15 +68,12 @@ public class User {
     @NotBlank(message = "PhoneNumber can not be white space")
     @Size(min = 10,max = 20,message = "PhoneNumber '${validatedValue}' must be between {min} and {max} long")
 	@Column(name="phoneNumber",length = 20, nullable = true)
-	private String phoneNumber;
+	private String phoneNumber;	
 	
-	
-	@OneToMany(mappedBy="user",orphanRemoval=true)
-	private List<Book> books=new ArrayList<>();
+//	@OneToMany(mappedBy="user",orphanRemoval=true)
+//	private List<Book> books=new ArrayList<>();
 	
 	@JoinTable(name="tbl_user_role",joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns = @JoinColumn(name="role_id"))
-	@ManyToMany(fetch=FetchType.EAGER)// az veri olacagi icin cok tablo yok diye EAGER yaptik
-	private Set<Role> roles=new HashSet<>();//Set yapmamizin sebebi Unique olmasi
-	
-
+	@ManyToMany(fetch=FetchType.EAGER)
+	private Set<Role> roles=new HashSet<>();		
 }

@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,9 +46,21 @@ public class Book {
     @Size(min = 2,max = 50,message = "Category name '${validatedValue}' must be between {min} and {max} long")
 	@Column (name="category",length=100,nullable=false)
 	private String category;
+	//alinaBilirMi,alinmaTarihi,alanKisi
 	
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	private User user;
-
+		//kitap durumu 
+	@Column (name="status",length=10,nullable=false)
+	private Boolean status;
+	
+	//alınma tarihi
+	@Column (name="date",length=10,nullable=false)
+	private String date;
+	
+	//alan kişi maili
+	@Column (name="owner",length=50,nullable=false)
+	private String owner;
+	
+//	@ManyToOne
+//	@JoinColumn(name="user_id")
+//	private User user;
 }

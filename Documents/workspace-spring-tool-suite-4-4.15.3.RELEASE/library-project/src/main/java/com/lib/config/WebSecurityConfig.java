@@ -14,53 +14,48 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import com.lib.security.AuthTokenFilter;
-
 import lombok.AllArgsConstructor;
-
 
 @AllArgsConstructor
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)//method bazli olmasi icin
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Autowired
+	@Autowired 
 	private UserDetailsService userDetailsService;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().//method bazli calisacagiz
+		http.csrf().disable().//metod metod rol vermek için
 		sessionManagement().
-		sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+		sessionCreationPolicy(SessionCreationPolicy.STATELESS).//user-db birbirinin bilmesin
 		and().
 		authorizeRequests().
-	    antMatchers("/register","/login").permitAll().
-	    anyRequest().authenticated();//kimsin diye digerlerine sor
-		
-		http.addFilterBefore(authTokenFilter() , UsernamePasswordAuthenticationFilter.class);
-	
-		
-	}
+		antMatchers("/register","/login").permitAll().//bunlarda autozie sorma
+		anyRequest().authenticated();	
+		http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);		
+	}	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
+	}	
 	
 	@Bean
 	public AuthTokenFilter authTokenFilter() {
-		
 		return new AuthTokenFilter();
-	}
+	}	
 	
 	@Bean
 	protected AuthenticationManager authenticationManager()throws Exception{
 		return super.authenticationManager();
-	}
+	}	
 	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
 }

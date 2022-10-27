@@ -13,33 +13,31 @@ import io.jsonwebtoken.UnsupportedJwtException;
 @Component
 public class JwtUtils {
 	
-	private String jwtSecret = "batch82";//JWT icin gerekli iceride bir secret yapmamiz lazim
+	private String jwtSecret = "batch82";
 	
-	// 24*60*60*1000// 1 gun e esit bu ms. cinsinden
-	private long jwtExpirationMs = 86400000;//JWT icin guvenlik suresi tekrarlama yeni token icin
+	// 24*60*60*1000
+	private long jwtExpirationMs = 86400000;//token yaşam süresi
 	
-	//************* GENRERATE -- TOKEN  ************
-	//token uretiyoruz
-	public String generateToken(Authentication authentication) {//String olmasi -> math. islem olmayacak
+	//************* GENERATE -- TOKEN  ************
+	public String generateToken(Authentication authentication) {
 		
-		// anlık olarak login olarak kullanıcının bilgisini alıyorum. cunku UserName ye ihtiyacim var
-		    UserDetailsImpl userDetails  = (UserDetailsImpl) authentication.getPrincipal();//getPrincipal kullanici bilgilerini getiriyor
+		// anlık olarak login olarak kullanıcının bilgisini alıyorum
+		    UserDetailsImpl userDetails  = (UserDetailsImpl) authentication.getPrincipal();
 		 // Token builder() ile üretiliyor
-		  // token üretilirken UserName ve secret key kullanılıyor
-		 return Jwts.builder() .setSubject(userDetails.getUsername()).//username yi getirdik
-				 										setIssuedAt(new Date()).//olusturma tarihi
-				 										setExpiration(new Date(new Date().getTime()+ jwtExpirationMs)).//token S.K.T. su andaki vakite yukarida olusturdugumuz saati ekleyecegiz
-				 										signWith(SignatureAlgorithm.HS512, jwtSecret).//buraya da sifreleme algoritma methodunu ekliyoruz ve Secret imizi ekliyoruz
-				 										compact();//topla bunlari
+		  // token üretilirken UserName ve secret key kullanılıyor  
+		 return Jwts.builder() .
+				               setSubject(userDetails.getUsername()).				 
+				               setIssuedAt(new Date()).//token oluşturma zamanı
+				               setExpiration(new Date(new Date().getTime()+ jwtExpirationMs)).//token son kullanma tarihi
+				               signWith(SignatureAlgorithm.HS512, jwtSecret).//
+				               compact() ;
 	}
 	
+
 	//***************************************************
 	
-	
-	
-	
 	//******************* VALIDATE-TOKEN**************
-	public boolean validateToken(String token) {//ture veya false
+	public boolean validateToken(String token) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
 			return true;
@@ -68,4 +66,5 @@ public class JwtUtils {
 	public String getUserNameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
+
 }

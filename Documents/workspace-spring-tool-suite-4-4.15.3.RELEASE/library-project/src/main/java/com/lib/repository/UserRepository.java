@@ -8,10 +8,10 @@ import org.springframework.stereotype.Repository;
 import com.lib.domain.User;
 import com.lib.exception.ResourceNotFoundException;
 
-@Repository
+@Repository 
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	Optional<User>findByUserMail(String userMail)throws ResourceNotFoundException;
-	Boolean existsByUserMail(String userMail);//ihtiyac olabilir diye
+	Optional<User> findByUserMail(String userMail) throws ResourceNotFoundException;
+	Boolean existsByUserMail(String userMail);
 
 }
