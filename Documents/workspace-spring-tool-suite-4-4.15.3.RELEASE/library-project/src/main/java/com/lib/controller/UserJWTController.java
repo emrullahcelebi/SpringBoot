@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.lib.controller.dto.AddBookRequestDTO;
 import com.lib.controller.dto.ListBooksForUserDTO;
@@ -249,13 +250,20 @@ public class UserJWTController {
     
     
   //hem alinabilir kitaplar= true
+    
     @GetMapping("/BookStatus/{isAvailable}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
      public ResponseEntity<List<Book>> availableBooks(@PathVariable("isAvailable")Boolean status) {
       List<Book> books=  bookService.getAvailableBooks(status);
       return ResponseEntity.ok(books);
   }
-    
+    //--------ADMIN TUM KiTAPLARI GETIR
+    @GetMapping("/BookAllStatus")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+     public ResponseEntity<List<Book>> AllStatusBooks() {
+      List<Book> books=  bookService.getAllStatusBooks();
+      return ResponseEntity.ok(books);
+  }
  
     
     

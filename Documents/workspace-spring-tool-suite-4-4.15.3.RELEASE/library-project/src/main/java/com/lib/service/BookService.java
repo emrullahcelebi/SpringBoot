@@ -155,6 +155,9 @@ public class BookService {
         bookRepository.save(book);
 
     }
+    
+    
+    //-------kullanicinin kitaplari
 	public List<Book> getMyBooks(String mail) {
 		List<Book> myBooks= bookRepository.findAllByOwner(mail);
 		
@@ -171,6 +174,12 @@ public class BookService {
 
         return bookRepository.bringAvailableBooks(status);
     }
+	
+	//--------ADMIN TUM KiTAPLARI GETIR
+	public List<Book> getAllStatusBooks() {
+		
+		return bookRepository.findAll();
+	}
 	
 	
 }

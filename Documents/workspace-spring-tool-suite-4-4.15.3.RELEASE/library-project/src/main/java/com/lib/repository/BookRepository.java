@@ -21,6 +21,7 @@ public interface BookRepository extends JpaRepository<Book, Long>{
 	
 	List<Book> bringAvailableBooks(@Param("isAvailable")Boolean status);
 	
+	
 	@Query("SELECT new com.lib.controller.dto.ListBooksForUserDTO(b) FROM Book b")
     List<ListBooksForUserDTO> findAllBook();
 	
