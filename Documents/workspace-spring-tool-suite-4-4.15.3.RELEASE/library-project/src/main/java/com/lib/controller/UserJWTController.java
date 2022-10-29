@@ -3,7 +3,6 @@ package com.lib.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +20,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.lib.security.JwtUtils;
-import com.lib.service.BookService;
-import com.lib.service.UserService;
 import com.lib.controller.dto.AddBookRequestDTO;
-import com.lib.controller.dto.LoginRequest;
+import com.lib.controller.dto.ListBooksForUserDTO;
 import com.lib.controller.dto.RegisterRequest;
 import com.lib.controller.dto.UpdateRequestDTO;
 import com.lib.domain.Book;
 import com.lib.domain.User;
-
+import com.lib.security.JwtUtils;
+import com.lib.service.BookService;
+import com.lib.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -41,14 +39,20 @@ import lombok.NoArgsConstructor;
 public class UserJWTController {
 	
 	
+	
+	@Autowired
+	public static Book book;
 	@Autowired
 	public static String loginOlanUserMaili;
 	
 	@Autowired
-	private UserService userService;
+	UserService userService;
 	
 	@Autowired
-	private BookService bookService;
+	public static ListBooksForUserDTO listBooksForUsersDTO ;
+	
+	@Autowired
+	BookService bookService;
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -79,6 +83,7 @@ public class UserJWTController {
 		map.put("status", "true");
 		return new ResponseEntity<>(map,HttpStatus.ACCEPTED);		
 	}
+	//kullanicilari listele
 	
 	@GetMapping("/listUsers")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -99,7 +104,7 @@ public class UserJWTController {
         return new ResponseEntity<>(map,HttpStatus.OK);
         //todo kullanıcının iade etmediği kitabı varsa silinemesin.      
     }
-	
+	//user i guncelle
 	@PutMapping("/updateUser/{id}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_USER')")
 	public ResponseEntity<Map<String, String>> updateUser( @PathVariable Long id, @RequestBody UpdateRequestDTO updateRequestDTO){
@@ -122,13 +127,15 @@ public class UserJWTController {
 		return new ResponseEntity<>(map,HttpStatus.CREATED);		
 	}
 	
-	@GetMapping("/listBooks")
-	@PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_USER')")
-	public ResponseEntity<List<Book>> getAllBooks() {		
-		List<Book> books=  bookService.getAllBooks();
-		return ResponseEntity.ok(books);		
-	}
 	
+	//--------------------DENEME----------------------
+	//*  KITAP LISTELEME user ıcın  **
+    @GetMapping("/listBooksForUsers")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<List<ListBooksForUserDTO>> getAllBooksForUser() {
+        List<ListBooksForUserDTO> books=  bookService.getBookForUser();
+        return ResponseEntity.ok(books);
+    }
 	
 	//*************Book silme********************
 	@DeleteMapping("/deleteBook/{id}")
@@ -165,11 +172,15 @@ public class UserJWTController {
 	
 		String mail=(String) request.getAttribute("mail");
 		//System.out.println(request.getAttribute("password"));
+				
 		bookService.getBook(id,mail);
+		
         Map<String,String> map = new HashMap<>();
         map.put("message", "Book is taken successfuly");
         map.put("status", "true");
+        
         return new ResponseEntity<>(map,HttpStatus.OK);
+        
 	}
 	
 	
@@ -214,24 +225,43 @@ public class UserJWTController {
     }
     
     
-    
-    @GetMapping("/availableBook")
-    @PreAuthorize("hasRole('ADMIN')")
- public ResponseEntity<List<Book>> availableBook( Boolean isAvailable) {
-        isAvailable=true;
+    // Alinabilir kitaplar
+//    @GetMapping("/availableBooks")
+//    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+// public ResponseEntity<List<Book>> availableBook( Boolean isAvailable) {
+//        isAvailable=true;
+//
+//        List<Book> books=  bookService.getAvailableBooks(isAvailable);
+//        return ResponseEntity.ok(books);
+//}
 
-        List<Book> books=  bookService.getAvailableBooks(isAvailable);
-        return ResponseEntity.ok(books);
-}
-
-    
-//    @GetMapping("/status/{isAvailable}")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//     public ResponseEntity<List<Book>> availableBooks(@PathVariable("isAvailable")Boolean status) {
-//      List<Book> books=  bookService.getAvailableBooks(status);
+//  Alınmis Kitaplar Listelensin  **
+//    @GetMapping("/takenBooks")
+//    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+//
+//     public ResponseEntity<List<Book>> getNotAvailableBooks(Boolean isAvailable) {
+//
+//        isAvailable = false;
+//      List<Book> books=  bookService.getAvailableBooks(isAvailable);
 //      return ResponseEntity.ok(books);
 //  }
     
+    
+    
+  //hem alinabilir kitaplar= true
+    @GetMapping("/BookStatus/{isAvailable}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+     public ResponseEntity<List<Book>> availableBooks(@PathVariable("isAvailable")Boolean status) {
+      List<Book> books=  bookService.getAvailableBooks(status);
+      return ResponseEntity.ok(books);
+  }
+    
+ 
+    
+    
+   
+    
+   
    
 	
 	
