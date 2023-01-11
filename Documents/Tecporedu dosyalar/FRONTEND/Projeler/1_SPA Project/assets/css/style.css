@@ -1,67 +1,74 @@
 :root{
     --color1: rgb(130, 97, 238);
     --color2: rgb(255, 88, 158);
-    --color3: rgba(130, 97, 238, 0.9);
-    --color4: rgba(255, 88, 158, 0.9);
+    --color3: rgba(130, 97, 238, 0.95);
+    --color4: rgba(255, 88, 158, 0.95);
     --color5: rgb(237, 237, 237);
     --color6: rgb(157, 157, 157);
-    --color7: rgb(32, 32, 32);
+    --color7: rgb(33, 33, 33);
     --color8: rgba(130, 97, 238, 0.3);
-    --color9: rgba(225, 88, 158, 0.3);
+    --color9: rgba(255, 88, 158, 0.3);
 
 }
+
 /************************* COMMON *************************/
+
 body{
     font-family: Raleway;
 }
+
 .btn{
     border-radius: 3rem;
     padding: 0.8rem 2rem;
     text-transform: uppercase;
 }
+
 .btn-primary{
     background-color: var(--color1);
     border-color: var(--color1);
 }
+
 .btn-primary:hover {
     background-color: var(--color2);
     border-color: var(--color2);
 }
+
 .btn-secondary{
     background-color: var(--color2);
     border-color: var(--color2);
 }
+
 .btn-secondary:hover {
     background-color: var(--color1);
     border-color: var(--color1);
 }
 
+
 .card{
-    font-size: 0.9rem;
     border-radius: 3rem;
     text-align: center;
-    border: 0;
+    border:0;
     box-shadow: 0 0 10px var(--color5);
     padding: 2rem 1rem;
-    }
+    font-size: 0.9rem;
+}
 
-    .section-header{
-        margin:0 auto;
-        margin-bottom: 3rem;
-        width: 60%;
-        text-align: center;
-    }
+.section-header{
+    margin:0 auto;
+    margin-bottom: 3rem;
+    width:60%;
+    text-align: center;    
+}
 
-    .section-header h3{
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
-    }
+.section-header h3{
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
 
-    .section-header.light{
-        color: var(--color5);
-    }
+.section-header.light{
+    color: var(--color5);
+}
 
-    
 
 /************************* NAVBAR *************************/
 nav.main-navbar{
@@ -69,12 +76,14 @@ nav.main-navbar{
     padding: 1.5rem;
     box-shadow: 0 0 10px var(--color5);
 }
+
 nav.main-navbar .navbar-nav{
     gap:1rem;
     font-size: 0.9rem;
     font-weight: 500;
     letter-spacing: 0.1rem;
 }
+
 /*Burası bootstrap teki seçiciler
 Biz aynısını kullanarak bootstrap stilini ezdik
 */
@@ -82,7 +91,9 @@ Biz aynısını kullanarak bootstrap stilini ezdik
 .navbar-nav .show>.nav-link {
     color: var(--color2);
 }
+
 /************************* CAROUSEL SLIDER *************************/
+
 .main-slider .carousel-item::before{
     content: "";
     background-image: linear-gradient(30deg, var(--color4), var(--color3));
@@ -90,6 +101,8 @@ Biz aynısını kullanarak bootstrap stilini ezdik
     top:0; left:0; right:0; bottom: 0;
     z-index: 5;
 }
+
+
 .main-slider .carousel-caption{
     z-index: 6;
     top:50%;
@@ -98,11 +111,13 @@ Biz aynısını kullanarak bootstrap stilini ezdik
     bottom: auto;
     transform: translateY(-50%);
 }
+
 .main-slider .carousel-caption h2{
     font-size: 2.5rem;
     letter-spacing: 0.1rem;
     margin-bottom: 2rem;
 }
+
 .main-slider .carousel-caption p{
     margin-bottom: 2rem;
 }
@@ -113,13 +128,14 @@ Biz aynısını kullanarak bootstrap stilini ezdik
     transform: translateY(-50%);
     position: relative;
     z-index: 99;
+    margin-bottom: -7rem;
 }
-@media (max-width:1200px){
+
+@media(max-width: 1200px){
     .highlights{
         transform: translateY(0);
-        margin-top: 4rem;
-        margin-bottom: 8rem;
-       
+        margin-top:4rem;
+        margin-bottom:8rem;
     }
 }
 
@@ -130,15 +146,15 @@ Biz aynısını kullanarak bootstrap stilini ezdik
 .highlights .card .card-body{
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap:1rem;
 }
 
 .highlights .card .icon{
     background-color: var(--color1);
-    width: 6rem;
+    width:6rem;
     height: 6rem;
     font-size: 3rem;
-    padding: 1rem;
+    padding:1rem;
     border-radius: 3rem;
     display: flex;
     justify-content: center;
@@ -151,12 +167,20 @@ Biz aynısını kullanarak bootstrap stilini ezdik
     font-weight: 600;
 }
 
-/*************************ABOUT US *************************/
-@media(max-width:768px){
+
+/************************* ABOUT US *************************/
+.about-us{
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+
+}
+
+@media(max-width: 768px){
     .about-us{
         text-align: center;
     }
 }
+
 .about-us .icon{
     font-size: 15rem;
     color: var(--color1);
@@ -172,23 +196,25 @@ Biz aynısını kullanarak bootstrap stilini ezdik
 
 .about-us h3{
     margin-bottom: 1.5rem;
-    letter-spacing: .1rem;
+    letter-spacing: 0.1rem;
 }
 
 .about-us p{
     color: var(--color6);
+    letter-spacing: 0.1rem;
 }
 
 
-/*************************WORK PROCESS *************************/
+/************************* WORK PROCESS *************************/
+
 
 .work-process{
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
     position: relative;
-    background-image: url("../img/banner-02.jpg");
-    margin-top: 5rem;
-   
+    background-image: url("../img/banner-01.jpg");
+    margin-top:5rem;
+    
 }
 
 
@@ -201,7 +227,7 @@ Biz aynısını kullanarak bootstrap stilini ezdik
     z-index: 1;
 }
 
-.work-process> .container{
+.work-process > .container{
     position: relative;
     z-index: 2;
 }
@@ -210,7 +236,7 @@ Biz aynısını kullanarak bootstrap stilini ezdik
     box-shadow: 1rem 1rem 0 var(--color8);
     border-radius: 1rem;
     cursor: pointer;
-    transition: transform 0.2s; /* geciktirme yapiyoruz */
+    transition: transform 0.2s;
 }
 
 .work-process .card:hover{
@@ -221,20 +247,18 @@ Biz aynısını kullanarak bootstrap stilini ezdik
     font-size: 3rem;
     color: var(--color3);
     margin-bottom: 1rem;
-
-
 }
 
 
-/*************************TESTIMONALS *************************/
+/************************* TESTIMONALS *************************/
 
 .testimonals{
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
 }
 
 .testimonals i{
-    font-size: 1.3rem;
+    font-size: 2rem;
     color: var(--color3);
     margin-bottom: 1rem;
 }
@@ -247,25 +271,26 @@ Biz aynısını kullanarak bootstrap stilini ezdik
     color: var(--color2);
 }
 
-/*************************PRICING PLAN *************************/
 
+
+/************************* PRICING PLAN *************************/
 .pricing-plan{
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
     background-color: var(--color5);
 }
 
 .pricing-plan .card .card-body{
     display: flex;
     flex-direction: column;
-    gap: 1.3rem;
+    gap:1.3rem;
 }
 
 .pricing-plan .price{
     background-color: var(--color1);
     border-radius: 20px;
     padding: 1rem;
-    color: var(--color5);
+    color: var(--color5)
 }
 
 .pricing-plan .col:nth-child(even) .price{
@@ -274,26 +299,27 @@ Biz aynısını kullanarak bootstrap stilini ezdik
 
 .pricing-plan ul{
     list-style-type: none;
-    padding: 0;
+    padding:0;
     margin:0;
-    color: var(--color6);
+    color: var(--color6)
 }
 
 .pricing-plan ul li{
-   line-height: 2rem;/* satır araları ıcın */
+    line-height: 2rem;
 }
 
 .pricing-plan ul li:last-child{
-   text-decoration: line-through;/* yazının ustunu cızmek ıcın */
- }
+    text-decoration: line-through;
+}
 
- .pricing-plan button{
+.pricing-plan button{
     align-self: center;
- }
+}
 
- /************************* STATISTICS *************************/
 
- .statistics{
+/************************* STATISTICS *************************/
+
+.statistics{
     background-image: url("../img/banner-02.jpg");
     background-position: center center;
     background-repeat: no-repeat;
@@ -328,106 +354,106 @@ Biz aynısını kullanarak bootstrap stilini ezdik
 }
 
 
- /************************* BLOG ENTRIES *************************/
-
- .blog-entries{
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+/************************* BLOG ENTRIES *************************/
+.blog-entries{
+    padding-top: 8rem;
+    padding-bottom: 8rem;
     text-align: center;
- }
+}
 
- .blog-entries img{
-    width: 100%;
-   
- }
 
- .blog-entries [class^="col"]{/* buradaki amac resmin altindaki kisimlarin aralarini acmak */
+.blog-entries img{
+    width:100%;
+    height: auto;
+}
+
+.blog-entries [class^="col"]{
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-   align-items: center;/* button lari duzeltmek icin */
- }
+    align-items: center;
+    gap:1rem;
+}
 
- 
- .blog-entries [class ^= "col"] h3{
+.blog-entries [class^="col"] h3{
     font-size: 1.2rem;
- }
+}
 
- .blog-entries [class ^= "col"] p{
+.blog-entries [class^="col"] p {
     color: var(--color6);
- }
+  }
 
 
- /************************* CONTACT *************************/
-
- .contact{
+/************************* CONTACT *************************/
+.contact{
     padding-top: 8rem;
     padding-bottom: 8rem;
     background-color: var(--color5);
- }
+}
 
- .contact .keep-in-touch{
+.contact .keep-in-touch{
     display: flex;
     flex-direction: column;
-    gap: 1rem;
- }
+    gap:1rem;
+}
 
- .contact .keep-in-touch h3{
+.contact .keep-in-touch h3{
     font-size: 1.3rem;
- }
+}
 
- .contact .keep-in-touch p{
+.contact .keep-in-touch p{
     color: var(--color6);
     line-height: 2rem;
- }
+}
 
- .contact input, .contact textarea{
+.contact input,
+.contact textarea{
     border-radius: 20px;
-    padding: .8rem 1.2rem;
-    font-size: .8rem;
- }
+    padding: 0.8rem 1.2rem;
+    font-size: 0.8rem;
+}
 
- .contact input:focus, .contact textarea:focus{
-  
+.contact input:focus,
+.contact textarea:focus{
     border-color: var(--color9);
-    box-shadow: var(--color9) 0px 0px 0px 0.25rem ;
- }
+    box-shadow:var(--color9) 0px 0px 0px 0.25rem;
+}
 
-  /************************* FOOTER *************************/
+/************************* FOOTER *************************/
 
-  .footer{
+.footer{
     padding-top: 5rem;
     padding-bottom: 5rem;
     background-image: linear-gradient(30deg, var(--color4), var(--color3));
     text-align: center;
-  }
+}
 
-  .footer ul{
+.footer ul{
     list-style-type: none;
-    margin: 0;
-    padding: 0;
+    margin:0;
+    padding:0;
     display: flex;
     justify-content: center;
-    gap: 1rem;
-  }
+    gap:1rem;
+}
 
-  .footer ul a{
+.footer ul a{
     display: flex;
-    justify-content: center;
     align-items: center;
-    text-decoration: none;
-    width: 2.5rem;
-    height: 2.5rem;
+    justify-content: center;
+    width:2.5rem;
+    height:2.5rem;
     background-color: var(--color5);
     border-radius: 2rem;
+    text-decoration: none;
     color: var(--color1);
     transition: transform 0.3s;
-  }
+}
 
-  .footer ul a:hover{
-    transform: scale(1.2) rotate(360deg);
-  }
-
-  .footer ul i{
+.footer ul i{
     font-size: 1.3rem;
-  }
+}
+
+.footer ul a:hover{
+    transform: scale(1.2) rotate(360deg);
+
+}
